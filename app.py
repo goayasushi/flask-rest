@@ -31,9 +31,12 @@ class Post(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route("/hello")
-def home():
-    return "Hello, Flask!"
+@app.route("/articles")
+def get_articles():
+    articles = Post.query.order_by(Post.created_at.desc()).all()
+    
+    articles_list = [{"id": article.id, "title": article.title, "body": article.body, "created_at": article.created_at  } for article in articles]
+    return jsonify(articles_list), 200
 
 @app.route("/create", methods=["POST"])
 def create():
