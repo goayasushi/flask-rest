@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request,jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
@@ -33,6 +34,16 @@ with app.app_context():
 @app.route("/hello")
 def home():
     return "Hello, Flask!"
+
+@app.route("/create", methods=["POST"])
+def create():
+      data = request.get_json() 
+      
+      post = Post(title=data["title"], body=data["body"])
+
+      db.session.add(post)
+      db.session.commit()
+      return jsonify({"message": "Post created"}), 201 
 
 if __name__ == "__main__":
     app.run(debug=True)
