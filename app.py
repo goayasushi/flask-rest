@@ -53,5 +53,14 @@ def get_article(id):
     article = Post.query.get_or_404(id)
     return jsonify({"id": article.id, "title": article.title, "body": article.body, "created_at": article.created_at}), 200
 
+@app.route("/<int:id>/update", methods=["PUT"])
+def update_article(id):
+    data = request.get_json()
+    article = Post.query.get_or_404(id)
+    article.title = data.get("title", article.title)
+    article.body = data.get("body", article.body)
+    db.session.commit()
+    return jsonify({"message": "Post updated"}), 200
+
 if __name__ == "__main__":
     app.run(debug=True)
