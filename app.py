@@ -48,5 +48,10 @@ def create():
       db.session.commit()
       return jsonify({"message": "Post created"}), 201 
 
+@app.route("/<int:id>/update", methods=["GET"])
+def get_article(id):
+    article = Post.query.get_or_404(id)
+    return jsonify({"id": article.id, "title": article.title, "body": article.body, "created_at": article.created_at}), 200
+
 if __name__ == "__main__":
     app.run(debug=True)
