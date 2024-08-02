@@ -8,10 +8,17 @@ import pytz
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+env = os.getenv('FLASK_ENV', 'development')
+if env == 'production':
+    load_dotenv('.env.production')
+else:
+    load_dotenv('.env.development')
 
 app = Flask(__name__)
-CORS(app)
+
+cors_origins = os.getenv('CORS_ORIGINS', '*')
+
+cors = CORS(app, resources={r"/*": {"origins": cors_origins}})
 
 DB_USERNAME = os.getenv("DB_USERNAME")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
