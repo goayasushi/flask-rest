@@ -62,5 +62,16 @@ def update_article(id):
     db.session.commit()
     return jsonify({"message": "Post updated"}), 200
 
+@app.route("/<int:id>/delete", methods=["DELETE"])
+def delete_article(id):
+    try:
+        article = Post.query.get_or_404(id)
+        db.session.delete(article)
+        db.session.commit()
+        return jsonify({"message": "Post deleted"}), 200
+    except Exception as e:
+        print(f"Error deleting article: {e}")
+        return jsonify({"error": "Delete failed"}), 400
+
 if __name__ == "__main__":
     app.run(debug=True)
